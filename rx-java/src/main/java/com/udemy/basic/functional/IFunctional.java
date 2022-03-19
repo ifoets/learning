@@ -105,7 +105,7 @@ public interface IFunctional {
 	public double randomNumberMethodRef();
 
 	/* class::staticMethod */
-	/* method reference take argument and return somthing */
+	/* method reference take argument and return something */
 	public String concateMethodRef(String str1, String str2);
 
 	/* class::instanceMethod */
@@ -125,7 +125,7 @@ public interface IFunctional {
 	/* getting the empty value back from Optional */
 	public void getEmptyOptional();
 
-	/* getting the empty thorw Optional */
+	/* getting the empty throw Optional */
 	public void getEmptyThrowFOptional();
 
 	/* Optional operation part1: map(), filter(), flatMap() */

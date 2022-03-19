@@ -143,7 +143,10 @@ public class FunctionalImpl implements IFunctional {
 //			if (i % 2 == 0)
 //				sum = sum + i;
 //		}
-		sum = IntStream.rangeClosed(0, 100).filter(i -> i % 2 == 0).reduce((x, y) -> x + y).getAsInt();
+		sum = IntStream.rangeClosed(0, 100)
+		        .filter(i -> i % 2 == 0)
+		        .reduce((x, y) -> x + y)
+		        .getAsInt();
 
 		return sum;
 	}
@@ -177,10 +180,11 @@ public class FunctionalImpl implements IFunctional {
 	@Override
 	public int multiStatement(String s) {
 
-		F3Interface f = str -> {
-			int l = str.length();
-			return l;
-		};
+		F3Interface f = str ->
+			{
+				int l = str.length();
+				return l;
+			};
 		return f.length(s);
 	}
 
@@ -207,6 +211,8 @@ public class FunctionalImpl implements IFunctional {
 	@Override
 	public List<String> filterString(List<String> list, String str) {
 		Predicate<String> predicate = s -> s.contains(str);
+		// or or and the with one predicate with others like short circuit
+		// predicate = predicate.or/and(s->s.contains("Basic"));
 		return filter(list, predicate);
 	}
 
@@ -226,6 +232,8 @@ public class FunctionalImpl implements IFunctional {
 	@Override
 	public <T> void acceptElement(List<T> t, Consumer<T> c) {
 		for (T t2 : t) {
+			// you can do series of consumer with below function
+			// c.andThen(s->System.out.println("Great job")).accept(t2);
 			c.accept(t2);
 		}
 	}
@@ -242,6 +250,9 @@ public class FunctionalImpl implements IFunctional {
 	@Override
 	public String stringConcat(String str1, String str2) {
 		Supplier<String> supplier = () -> new String(str1.concat(str2));
+		// there is no multiple supply whatever you can supply/return all at a time
+		// multiple return is meaning less stuff
+		// supplier.nofunction
 		return supplier.get();
 	}
 
@@ -344,7 +355,8 @@ public class FunctionalImpl implements IFunctional {
 
 		thread1.run();
 		thread2.run();
-		threadGenerator.apply(() -> System.out.println("Task 3 Executed")).start();
+		threadGenerator.apply(() -> System.out.println("Task 3 Executed"))
+		        .start();
 	}
 
 	/** Section 7: Optional for Null Pointer **/
@@ -430,16 +442,19 @@ public class FunctionalImpl implements IFunctional {
 
 		// map()..if value is not present then supply by orElse
 		Optional<String> optionalEmpty = Optional.empty();
-		String orElse = optionalEmpty.map(s -> "kumar").orElse("Empty");
+		String orElse = optionalEmpty.map(s -> "kumar")
+		        .orElse("Empty");
 		System.out.println(orElse);
 
 		// filter() it check the condition on Optional, it take Predicate to check
-		String orElseMap = optionalVal.map(s -> "kumar").orElse("Empty");
+		String orElseMap = optionalVal.map(s -> "kumar")
+		        .orElse("Empty");
 		System.out.println(orElseMap);
 		Optional<String> filter = optionalVal.filter(val -> val.equalsIgnoreCase("abhimanyu"));
 		System.out.println(filter.get());
 
 		// flatMap() it is similar to map whose resulting function is already Optional
+		// and in one single collection
 		Optional<String> flatMap = optionalVal.flatMap(val -> Optional.of("Replaced By FlatMap"));
 		System.out.println(flatMap.get());
 	}
@@ -451,23 +466,30 @@ public class FunctionalImpl implements IFunctional {
 		// ifPresent it consume the value present in Optional
 		Optional<String> optional = Optional.of("Value");
 		// if op
-		optional.ifPresent(e -> System.out.println("This is "));
+		optional.ifPresent(e -> System.out.println("This is " + e));
 		// if option is empty it don't do anything
-		Optional.empty().ifPresent(e -> System.out.println("This is "));
+		Optional.empty()
+		        .ifPresent(e -> System.out.println("This is "));
 
 		// even option is empty require to consume then use ifPresetOrElse
-		Optional.empty().ifPresentOrElse(System.out::print, () -> System.out.println("Value is absent"));
+		Optional.empty()
+		        .ifPresentOrElse(System.out::print, () -> System.out.println("Value is absent"));
 
 		// stream if value is present it return sequential of that value otherwise
 		// return empty String
 		Stream<String> stream = optional.stream();
 		stream.forEach(System.out::println);
-		Optional.empty().stream().forEach(System.out::println);
+		Optional.empty()
+		        .stream()
+		        .forEach(System.out::println);
 
 		// or it takes supplier and it return same optional if it has the value if empty
 		// then supplying new optional
-		optional.or(() -> Optional.of("New Value")).ifPresent(System.out::print);
-		Optional.empty().or(() -> Optional.of("New Value")).ifPresent(System.out::print);
+		optional.or(() -> Optional.of("New Value"))
+		        .ifPresent(System.out::print);
+		Optional.empty()
+		        .or(() -> Optional.of("New Value"))
+		        .ifPresent(System.out::print);
 
 		// case supplier return null then NPE arise
 		// Optional.empty().or(() -> null).ifPresent(System.out::print);
@@ -501,10 +523,11 @@ public class FunctionalImpl implements IFunctional {
 	 */
 	@Override
 	public <T, R> IFactory<R> higherOrderFunctioncreateFactory(IProducer<T> producer, IConfiguration<T, R> cofigure) {
-		return () -> {
-			T product = producer.produce();
-			return cofigure.configure(product);
-		};
+		return () ->
+			{
+				T product = producer.produce();
+				return cofigure.configure(product);
+			};
 	}
 
 	@Override
@@ -527,6 +550,7 @@ public class FunctionalImpl implements IFunctional {
 		System.out.println(result);
 	}
 
+	// @Revision point
 	/* Functional Programming Technique */
 
 	/* Function chaining */
@@ -536,10 +560,11 @@ public class FunctionalImpl implements IFunctional {
 		F1Consumer<String> c1 = x -> System.out.println(x);
 		F1Consumer<String> c2 = y -> System.out.println(y);
 		// c1.accept("Hello c1"); c2.accept("Hello c2");
-		F1Consumer<String> c3 = c -> {
-			c1.accept(c);
-			c2.accept(c);
-		};
+		F1Consumer<String> c3 = c ->
+			{
+				c1.accept(c);
+				c2.accept(c);
+			};
 		c3.accept("Hello C3");
 
 		F1Consumer<String> c4 = c1.thenAccept(c2);
@@ -574,19 +599,21 @@ public class FunctionalImpl implements IFunctional {
 
 		final int val = 100;
 
-		F1Closer fcal = () -> {
-			System.out.println(val);
-			System.out.println("Task Completed1");
-		};
+		F1Closer fcal = () ->
+			{
+				System.out.println(val);
+				System.out.println("Task Completed1");
+			};
 		printTaskCall1(fcal);
 	}
 
 	public void printTaskCall1(F1Closer fcal) {
 		final int val = 200;
-		F1Closer fcalNew = () -> {
-			System.out.println(val);
-			System.out.println("Task Completed2");
-		};
+		F1Closer fcalNew = () ->
+			{
+				System.out.println(val);
+				System.out.println("Task Completed2");
+			};
 		// fcal.thenDoNextTask(fcalNew);
 		printTask(fcal, fcalNew);
 	}
@@ -601,20 +628,22 @@ public class FunctionalImpl implements IFunctional {
 	@Override
 	public void closerExample2() {
 		final int val = 100;
-		F1Closer fcal = () -> {
-			System.out.println(val);
-			System.out.println("Task Completed1");
-		};
+		F1Closer fcal = () ->
+			{
+				System.out.println(val);
+				System.out.println("Task Completed1");
+			};
 		printTaskCall2(fcal);
 	}
 
 	@Override
 	public void printTaskCall2(F1Closer fcal) {
 		final int val = 200;
-		F1Closer fcalNew = () -> {
-			System.out.println(val);
-			System.out.println("Task Completed2");
-		};
+		F1Closer fcalNew = () ->
+			{
+				System.out.println(val);
+				System.out.println("Task Completed2");
+			};
 		printTask(fcal.thenDoNextTask(fcalNew));
 	}
 
@@ -664,9 +693,12 @@ public class FunctionalImpl implements IFunctional {
 		// System.out.println("--------------------");
 		// StockFilters.byPriceAbove(stockList, 300).forEach(System.out::println);
 
-		StrategyFilters.filter(stockList, stock -> stock.getSymbol().equals("AMZ")).forEach(System.out::println);
+		StrategyFilters.filter(stockList, stock -> stock.getSymbol()
+		        .equals("AMZ"))
+		        .forEach(System.out::println);
 		System.out.println("\n--------------------\n");
-		StrategyFilters.filter(stockList, stock -> stock.getPrice() > 300).forEach(System.out::println);
+		StrategyFilters.filter(stockList, stock -> stock.getPrice() > 300)
+		        .forEach(System.out::println);
 	}
 
 	/*
@@ -679,7 +711,7 @@ public class FunctionalImpl implements IFunctional {
 		// Burger myOrder = new DecoratorBurger(e -> e.addVegies()).use(new Burger());
 		// Burger newOrder = new DecoratorBurger(x -> x.addCheese()).use(myOrder);
 		Burger newOrder = new DecoratorBurger(x -> x.addCheese())
-				.use(new DecoratorBurger(e -> e.addVegies()).use(new Burger()));
+		        .use(new DecoratorBurger(e -> e.addVegies()).use(new Burger()));
 
 		System.out.println("I get :" + newOrder);
 	}
@@ -710,11 +742,13 @@ public class FunctionalImpl implements IFunctional {
 	@Override
 	public void builderDesignPatternExampl() {
 		MobileBuilder builder = new MobileBuilder();
-		Mobile mobile = builder.with(myBuilder -> {
-			myBuilder.ram = 4;
-			myBuilder.battery = 4000;
-			myBuilder.processor = "A12 Bionic";
-		}).createMobile();
+		Mobile mobile = builder.with(myBuilder ->
+			{
+				myBuilder.ram = 4;
+				myBuilder.battery = 4000;
+				myBuilder.processor = "A12 Bionic";
+			})
+		        .createMobile();
 		System.out.println(mobile.toString());
 	}
 
@@ -734,22 +768,27 @@ public class FunctionalImpl implements IFunctional {
 
 	/* Stream Introduction Example, collect book based on requirement */
 	public List<Book> streamIntroExampl(List<Book> books) {
-		return books.parallelStream().filter(book -> book.getGenre().equalsIgnoreCase("horror"))
-				.filter(book -> book.getRating() > 3).collect(Collectors.toList());
+		return books.parallelStream()
+		        .filter(book -> book.getGenre()
+		                .equalsIgnoreCase("horror"))
+		        .filter(book -> book.getRating() > 3)
+		        .collect(Collectors.toList());
 	}
 
 	/* Observing the Stream operation ie section wise operation */
 	public List<Book> observationOnStreamOperation(List<Book> books) {
 		// Stream Pipeline
 		books.stream() // Source
-				.filter((book) -> book.getGenre().equalsIgnoreCase("Horror")) // Intermediate Op
-				.filter((book) -> book.getRating() > 3) // Intermediate Op
-				.collect(Collectors.toList()); // Terminal Op
+		        .filter((book) -> book.getGenre()
+		                .equalsIgnoreCase("Horror")) // Intermediate Op
+		        .filter((book) -> book.getRating() > 3) // Intermediate Op
+		        .collect(Collectors.toList()); // Terminal Op
 
 		// 1.Source
 		Stream<Book> stream = books.stream();
 		// 2. Intermediate Operation
-		Stream<Book> horrorBooks = stream.filter((book) -> book.getGenre().equalsIgnoreCase("Horror"));
+		Stream<Book> horrorBooks = stream.filter((book) -> book.getGenre()
+		        .equalsIgnoreCase("Horror"));
 		// 3. Intermediate Operation
 		Stream<Book> pHorrorBooks = horrorBooks.filter((book) -> book.getRating() > 3);
 		// 4. Terminal operation
@@ -774,13 +813,19 @@ public class FunctionalImpl implements IFunctional {
 //		List<Book> popularRomanticBooks = stream.filter((book) -> book.getGenre().equalsIgnoreCase("Romance"))
 //				.filter((book) -> book.getRating() > 3).collect(Collectors.toList());
 
-		List<Book> popularHorrorBooks = books.stream().filter((book) -> book.getGenre().equalsIgnoreCase("Horror"))
-				.filter((book) -> book.getRating() > 3).collect(Collectors.toList());
+		List<Book> popularHorrorBooks = books.stream()
+		        .filter((book) -> book.getGenre()
+		                .equalsIgnoreCase("Horror"))
+		        .filter((book) -> book.getRating() > 3)
+		        .collect(Collectors.toList());
 
 		popularHorrorBooks.forEach(System.out::println);
 
-		List<Book> popularRomanticBooks = books.stream().filter((book) -> book.getGenre().equalsIgnoreCase("Romance"))
-				.filter((book) -> book.getRating() > 3).collect(Collectors.toList());
+		List<Book> popularRomanticBooks = books.stream()
+		        .filter((book) -> book.getGenre()
+		                .equalsIgnoreCase("Romance"))
+		        .filter((book) -> book.getRating() > 3)
+		        .collect(Collectors.toList());
 		popularRomanticBooks.forEach(System.out::println);
 
 		return popularRomanticBooks;
@@ -788,24 +833,34 @@ public class FunctionalImpl implements IFunctional {
 
 	/* Filter Operation print even value, filter even values from stream */
 	public void filterOperationExmpl() {
-		Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9).filter(e -> e % 2 == 0).forEach(System.out::println);
+		Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9)
+		        .filter(e -> e % 2 == 0)
+		        .forEach(System.out::println);
 	}
 
 	/* map operation, print multiplication table of 5 */
 	public void mapOperationExml() {
-		Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).map(e -> e * 5).forEach(e -> System.out.println(e));
+		Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+		        .map(e -> e * 5)
+		        .forEach(e -> System.out.println(e));
 	}
 
 	/* filter map operation together, require only the book name after filter */
 	public void filterMapOperationTogether(List<Book> books) {
-		books.stream().filter(e -> e.getGenre().equals("Horror")).filter(e -> e.getRating() > 3).map(e -> e.getName())
-				.forEach(System.out::println);
+		books.stream()
+		        .filter(e -> e.getGenre()
+		                .equals("Horror"))
+		        .filter(e -> e.getRating() > 3)
+		        .map(e -> e.getName())
+		        .forEach(System.out::println);
 	}
 
 	/* reduce operation ..get sum of elements */
 	public void reducedOperation() {
 
-		Integer sum = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).filter(e -> e % 2 == 0).reduce(0, (a, b) -> a + b);
+		Integer sum = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+		        .filter(e -> e % 2 == 0)
+		        .reduce(0, (a, b) -> a + b);
 		System.out.println(sum);
 	}
 
@@ -818,8 +873,11 @@ public class FunctionalImpl implements IFunctional {
 	}
 
 	public void lazyEvaluationStream(List<Book> books) {
-		Stream<Book> stream = books.stream().filter(e -> e.getGenre().equals("Horror"))
-				.peek(book -> System.out.println("Filtered book " + book)).filter(e -> e.getRating() > 3);
+		Stream<Book> stream = books.stream()
+		        .filter(e -> e.getGenre()
+		                .equals("Horror"))
+		        .peek(book -> System.out.println("Filtered book " + book))
+		        .filter(e -> e.getRating() > 3);
 		System.out.println("Filter done! ");
 		collect(stream);
 	}
@@ -830,7 +888,9 @@ public class FunctionalImpl implements IFunctional {
 	 */
 	public void numericStreamExmpl(List<Book> books) {
 		// books.stream().map(book->book.getRating()).mapToDouble(rating->rating).average();
-		OptionalDouble average = books.stream().mapToDouble(book -> book.getRating()).average();
+		OptionalDouble average = books.stream()
+		        .mapToDouble(book -> book.getRating())
+		        .average();
 		System.out.println(average.getAsDouble());
 		// map : Objects ie Boxing
 		// mapToDouble : Double to primitive double ie unboxing
@@ -843,23 +903,28 @@ public class FunctionalImpl implements IFunctional {
 		// LongStream
 
 		// Sum
-		int sum = IntStream.of().sum();
+		int sum = IntStream.of()
+		        .sum();
 		System.out.println(sum);
 
 		// max() Optional : primitive
-		OptionalInt maxOptional = IntStream.of(1, 3, 4, 5).max();
+		OptionalInt maxOptional = IntStream.of(1, 3, 4, 5)
+		        .max();
 		System.out.println(maxOptional.getAsInt());
 
 		// min() : Optional Primitive
-		OptionalInt minOptional = IntStream.of(1, 2, 3, 4).min();
+		OptionalInt minOptional = IntStream.of(1, 2, 3, 4)
+		        .min();
 		System.out.println(minOptional.getAsInt());
 
 		// average() OptionalDouble
-		OptionalDouble avgOptional = IntStream.of(1, 2, 3, 4).average();
+		OptionalDouble avgOptional = IntStream.of(1, 2, 3, 4)
+		        .average();
 		System.out.println(avgOptional.getAsDouble());
 
 		// summaryStatistics()
-		IntSummaryStatistics summaryStatistics = IntStream.of(1, 2, 34).summaryStatistics();
+		IntSummaryStatistics summaryStatistics = IntStream.of(1, 2, 34)
+		        .summaryStatistics();
 		System.out.println(summaryStatistics);
 	}
 
@@ -871,13 +936,16 @@ public class FunctionalImpl implements IFunctional {
 		streamIntegers.forEach(e -> System.out.println(e));
 		// How we can stream a Map.
 		Map<Integer, String> map = Map.of(1, "one", 2, "two", 3, "three", 4, "four");
-		Stream<Entry<Integer, String>> entries = map.entrySet().stream();
+		Stream<Entry<Integer, String>> entries = map.entrySet()
+		        .stream();
 		entries.forEach(e -> System.out.println(e));
 
-		Stream<String> values = map.values().stream();
+		Stream<String> values = map.values()
+		        .stream();
 		values.forEach(e -> System.out.println(e));
 
-		Stream<Integer> keys = map.keySet().stream();
+		Stream<Integer> keys = map.keySet()
+		        .stream();
 		keys.forEach(e -> System.out.println(e));
 
 		// 2. of() Stream class
@@ -898,7 +966,8 @@ public class FunctionalImpl implements IFunctional {
 		// code
 		// condition
 		builder.add(4);
-		builder.build().forEach(e -> System.out.println(e));
+		builder.build()
+		        .forEach(e -> System.out.println(e));
 	}
 
 	/* unbounded Stream, Finite Stream creating example */
@@ -910,7 +979,9 @@ public class FunctionalImpl implements IFunctional {
 		// .forEach(System.out::println);
 
 		// if we don't put limit it execute infinite
-		Stream.generate(new Random()::nextInt).limit(15).forEach(System.out::println);
+		Stream.generate(new Random()::nextInt)
+		        .limit(15)
+		        .forEach(System.out::println);
 	}
 
 	/* flastMap operation example */
@@ -918,15 +989,17 @@ public class FunctionalImpl implements IFunctional {
 		Stream<String> a = Stream.of("Hello ", "there! ");
 		Stream<String> b = Stream.of("Learning", "Java? ");
 		// Stream<Stream<String>> of = Stream.of(a, b);
-		Stream<String> flatMap = Stream.of(a, b).flatMap(e -> e);
-		flatMap.collect(Collectors.toList()).forEach(System.out::println);
+		Stream<String> flatMap = Stream.of(a, b)
+		        .flatMap(e -> e);
+		flatMap.collect(Collectors.toList())
+		        .forEach(System.out::println);
 
 		System.out.println("======================output from files=======================");
 		Path p = Paths.get("src/comman/inputdoc/notebook.txt");
 		try (Stream<String> notebook = Files.lines(p);) {
 
 			List<String> collect = notebook.flatMap(line -> Arrays.stream(line.split(" ")))
-					.collect(Collectors.toList());
+			        .collect(Collectors.toList());
 			collect.forEach(System.out::println);
 
 		} catch (IOException e1) {
@@ -940,13 +1013,17 @@ public class FunctionalImpl implements IFunctional {
 		long endTime;
 
 		startTime = System.currentTimeMillis();
-		System.out.println("Performing Sequentially: " + list.stream().filter(e -> e.getSalary() > 1000).count());
+		System.out.println("Performing Sequentially: " + list.stream()
+		        .filter(e -> e.getSalary() > 1000)
+		        .count());
 		endTime = System.currentTimeMillis();
 
 		System.out.println("Time taken with Sequential : " + (endTime - startTime));
 
 		startTime = System.currentTimeMillis();
-		System.out.println("Performing parallely: " + list.parallelStream().filter(e -> e.getSalary() > 1000).count());
+		System.out.println("Performing parallely: " + list.parallelStream()
+		        .filter(e -> e.getSalary() > 1000)
+		        .count());
 		endTime = System.currentTimeMillis();
 
 		System.out.println("Time taken with parallel : " + (endTime - startTime));
@@ -955,19 +1032,26 @@ public class FunctionalImpl implements IFunctional {
 	/* Stateless and Stateful example why not use parallel frequently */
 	public void statelessStatefulOpr() {
 		List<Integer> list = List.of(1, 2, 4, 5, 6, 7, 9);
-		List<Integer> collect = list.parallelStream().skip(2).limit(5).collect(Collectors.toList());
+		List<Integer> collect = list.parallelStream()
+		        .skip(2)
+		        .limit(5)
+		        .collect(Collectors.toList());
 		collect.forEach(e -> System.out.println(e));
 	}
 
 	/* Setting up the parallelism Example */
 	public void settingUpParallelismExmpl(List<EEmployee> list) throws InterruptedException, ExecutionException {
-		System.out.println(Runtime.getRuntime().availableProcessors());
+		System.out.println(Runtime.getRuntime()
+		        .availableProcessors());
 		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "2");
 		System.out.println(ForkJoinPool.getCommonPoolParallelism());
 
 		ForkJoinPool pool = new ForkJoinPool(2);
 
-		long count = pool.submit(() -> list.parallelStream().filter(e -> e.getSalary() > 1000).count()).get();
+		long count = pool.submit(() -> list.parallelStream()
+		        .filter(e -> e.getSalary() > 1000)
+		        .count())
+		        .get();
 
 		System.out.println(count);
 
@@ -991,10 +1075,13 @@ public class FunctionalImpl implements IFunctional {
 		// And
 		System.out.println(bits & 0x00000010);
 		System.out.println(spliterator.hasCharacteristics(0x00000010));
-		long count = list.stream().filter(x -> {
-			System.out.println("mapping");
-			return x == x * 2;
-		}).count();
+		long count = list.stream()
+		        .filter(x ->
+			        {
+				        System.out.println("mapping");
+				        return x == x * 2;
+			        })
+		        .count();
 
 		System.out.println(count);
 
@@ -1041,31 +1128,36 @@ public class FunctionalImpl implements IFunctional {
 			List<Employee> empList = employees.collect(Collectors.toList());
 
 			/* collect the all names of employees in list */
-			List<String> empNames = empList.stream().map(emp -> emp.getName()).collect(Collectors.toList());
+			List<String> empNames = empList.stream()
+			        .map(emp -> emp.getName())
+			        .collect(Collectors.toList());
 			System.out.println("--------------X-------Name List----------X------");
 			empNames.forEach(System.out::println);
 
 			/* collect all the destination in company */
 			System.out.println("--------------X-------Designation Set----------X------ ");
-			Set<String> empDesination = empList.stream().map(emp -> emp.getDesignation()).collect(Collectors.toSet());
+			Set<String> empDesination = empList.stream()
+			        .map(emp -> emp.getDesignation())
+			        .collect(Collectors.toSet());
 			empDesination.forEach(System.out::println);
 
 			/* collect the name of employee in sorted order */
 			System.out.println("--------------X-------Name TreeSet----------X------");
-			TreeSet<String> treeSet = empList.stream().map(emp -> emp.getName())
-					.collect(Collectors.toCollection(TreeSet::new));
+			TreeSet<String> treeSet = empList.stream()
+			        .map(emp -> emp.getName())
+			        .collect(Collectors.toCollection(TreeSet::new));
 			treeSet.forEach(System.out::println);
 
 			/* collect the name of employees by id in map */
 			System.out.println("--------------X-------Map Name byid----------X------");
 			Map<Integer, String> mapNameById = empList.stream()
-					.collect(Collectors.toMap(e -> e.getId(), e -> e.getName()));
+			        .collect(Collectors.toMap(e -> e.getId(), e -> e.getName()));
 			System.out.println(mapNameById);
 
 			/* collect male and female employees separately */
 			System.out.println("--------------X-------Male and Female emp in map----------X------");
 			Map<Boolean, List<Employee>> partitionedData = empList.stream()
-					.collect(Collectors.partitioningBy(e -> e.getGender() == 'M'));
+			        .collect(Collectors.partitioningBy(e -> e.getGender() == 'M'));
 
 			System.out.println(partitionedData);
 
@@ -1074,15 +1166,19 @@ public class FunctionalImpl implements IFunctional {
 
 			System.out.println("All Male Emp: " + maleEmployees + "\n All Female Emp :" + femaleEmployees);
 			Map<String, List<Employee>> getByDesignation = empList.stream()
-					.collect(Collectors.groupingBy(e -> e.getDesignation()));
+			        .collect(Collectors.groupingBy(e -> e.getDesignation()));
 			System.out.println(getByDesignation);
 
-			Long collect = empList.stream().map(e -> e.getSalary()).collect(Collectors.counting());
+			Long collect = empList.stream()
+			        .map(e -> e.getSalary())
+			        .collect(Collectors.counting());
 			System.out.println(collect);
 
 			System.out.println("-----X-------Map---------X---");
 
-			String employeeNamesString = empList.stream().map(e -> e.getName()).collect(Collectors.joining(", "));
+			String employeeNamesString = empList.stream()
+			        .map(e -> e.getName())
+			        .collect(Collectors.joining(", "));
 
 			System.out.println(employeeNamesString);
 
@@ -1104,26 +1200,28 @@ public class FunctionalImpl implements IFunctional {
 
 			/* how many employees in each destination */
 			Map<String, Long> countByDesignation = employeeList.stream()
-					.collect(Collectors.groupingBy(e -> e.getDesignation(), Collectors.counting()));
+			        .collect(Collectors.groupingBy(e -> e.getDesignation(), Collectors.counting()));
 
 			System.out.println(countByDesignation);
 
 			/* collect fund distrubution of each destination */
-			Map<String, Double> fundDistribution = employeeList.stream().collect(
-					Collectors.groupingBy(e -> e.getDesignation(), Collectors.summingDouble(e -> e.getSalary())));
+			Map<String, Double> fundDistribution = employeeList.stream()
+			        .collect(Collectors.groupingBy(e -> e.getDesignation(),
+			                Collectors.summingDouble(e -> e.getSalary())));
 
 			System.out.println(fundDistribution);
 
 			/* collecting max salary in each destination by employee */
-			Map<String, Optional<Employee>> maxSalaryEmployees = employeeList.stream().collect(Collectors
-					.groupingBy(e -> e.getDesignation(), Collectors.maxBy(Comparator.comparing(e -> e.getSalary()))));
+			Map<String, Optional<Employee>> maxSalaryEmployees = employeeList.stream()
+			        .collect(Collectors.groupingBy(e -> e.getDesignation(),
+			                Collectors.maxBy(Comparator.comparing(e -> e.getSalary()))));
 
 			System.out.println(maxSalaryEmployees);
 
 			/* collecting max salary in each destination by value */
 			Map<String, Optional<Double>> maxSalaries = employeeList.stream()
-					.collect(Collectors.groupingBy(e -> e.getDesignation(), Collectors.mapping(e -> e.getSalary(),
-							Collectors.maxBy(Comparator.comparing(Function.identity())))));
+			        .collect(Collectors.groupingBy(e -> e.getDesignation(), Collectors.mapping(e -> e.getSalary(),
+			                Collectors.maxBy(Comparator.comparing(Function.identity())))));
 
 			System.out.println(maxSalaries);
 
@@ -1139,30 +1237,38 @@ public class FunctionalImpl implements IFunctional {
 	/* Creating own Collectors1 **/
 	public void createOwnCollectorsExmpl1(List<Integer> numbers) {
 		Collector<Integer, List<Integer>, List<Integer>> toList = Collector.of(ArrayList::new, // supplier
-				(list, e) -> list.add(e), // BiConsumer
-				(list1, list2) -> {
-					list1.addAll(list2);
-					return list1;
-				}, // BiFunction
-				Collector.Characteristics.IDENTITY_FINISH);
+		        (list, e) -> list.add(e), // BiConsumer
+		        (list1, list2) ->
+			        {
+				        list1.addAll(list2);
+				        return list1;
+			        }, // BiFunction
+		        Collector.Characteristics.IDENTITY_FINISH);
 
-		List<Integer> evens = numbers.stream().filter(e -> e % 2 == 0).collect(toList);
+		List<Integer> evens = numbers.stream()
+		        .filter(e -> e % 2 == 0)
+		        .collect(toList);
 		evens.forEach(System.out::println);
 	}
 
 	/* Creating own Collectors1 that add element in the list sorted order **/
 	public void createOwnCollectorsExmpl2(List<Integer> numbers) {
 		Collector<Integer, List<Integer>, List<Integer>> toSortedListCollector = Collector.of(ArrayList::new, // supplier
-				(list, e) -> list.add(e), // BiConsumer
-				(list1, list2) -> {
-					list1.addAll(list2);
-					return list1;
-				}, (list) -> {
-					Collections.sort(list);
-					return list;
-				}, Collector.Characteristics.UNORDERED);
+		        (list, e) -> list.add(e), // BiConsumer
+		        (list1, list2) ->
+			        {
+				        list1.addAll(list2);
+				        return list1;
+			        },
+		        (list) ->
+			        {
+				        Collections.sort(list);
+				        return list;
+			        },
+		        Collector.Characteristics.UNORDERED);
 
-		List<Integer> sortedList = numbers.stream().collect(toSortedListCollector);
+		List<Integer> sortedList = numbers.stream()
+		        .collect(toSortedListCollector);
 		sortedList.forEach(System.out::println);
 	}
 
@@ -1177,13 +1283,20 @@ public class FunctionalImpl implements IFunctional {
 		movies.sort((o1, o2) -> o2.getReleaseYear() - o1.getReleaseYear());
 		movies.forEach(System.out::println);
 		System.out.println("------------------");
-		movies.stream().filter(movie -> movie.getIndustry().equalsIgnoreCase("Bollywood")).forEach(System.out::println);
+		movies.stream()
+		        .filter(movie -> movie.getIndustry()
+		                .equalsIgnoreCase("Bollywood"))
+		        .forEach(System.out::println);
 		System.out.println("------------------");
 		// Mapping
-		movies.stream().map(movie -> movie.getName()).forEach(System.out::println);
+		movies.stream()
+		        .map(movie -> movie.getName())
+		        .forEach(System.out::println);
 		System.out.println("------------------");
 		// Reduce
-		Optional<String> moviesString = movies.stream().map(m -> m.getName()).reduce((m1, m2) -> m1 + " | " + m2);
+		Optional<String> moviesString = movies.stream()
+		        .map(m -> m.getName())
+		        .reduce((m1, m2) -> m1 + " | " + m2);
 		System.out.println(moviesString);
 		System.out.println("------------------");
 	}
@@ -1195,23 +1308,32 @@ public class FunctionalImpl implements IFunctional {
 		System.out.println("--------------------");
 
 		// Filter
-		set.stream().filter(e -> e % 2 == 0).forEach(System.out::println);
+		set.stream()
+		        .filter(e -> e % 2 == 0)
+		        .forEach(System.out::println);
 		System.out.println("--------------------");
 
 		// Sorting
-		set.stream().sorted().forEach(System.out::println);
+		set.stream()
+		        .sorted()
+		        .forEach(System.out::println);
 		System.out.println("--------------------");
-		TreeSet<Integer> sortedSet = set.stream().collect(Collectors.toCollection(TreeSet::new));
+		TreeSet<Integer> sortedSet = set.stream()
+		        .collect(Collectors.toCollection(TreeSet::new));
 		sortedSet.forEach(System.out::println);
 		System.out.println("--------------------");
 
 		// Map
-		Set<Double> hashSet = set.stream().map(e -> Double.valueOf(e)).collect(Collectors.toSet());
+		Set<Double> hashSet = set.stream()
+		        .map(e -> Double.valueOf(e))
+		        .collect(Collectors.toSet());
 		hashSet.forEach(System.out::println);
 		System.out.println("--------------------");
 
 		// reduce
-		int sum = set.stream().mapToInt(e -> e).sum();
+		int sum = set.stream()
+		        .mapToInt(e -> e)
+		        .sum();
 		System.out.println(sum);
 	}
 
@@ -1227,23 +1349,31 @@ public class FunctionalImpl implements IFunctional {
 		System.out.println("---------------------------");
 
 		// Filter
-		contacts.entrySet().stream().filter(contact -> "John".equalsIgnoreCase(contact.getValue()))
-				.forEach(System.out::println);
+		contacts.entrySet()
+		        .stream()
+		        .filter(contact -> "John".equalsIgnoreCase(contact.getValue()))
+		        .forEach(System.out::println);
 
-		Map<String, String> filteredContacts = contacts.entrySet().stream()
-				.filter(contact -> "John".equalsIgnoreCase(contact.getValue()))
-				.collect(Collectors.toMap(c -> c.getKey(), c -> c.getValue()));
+		Map<String, String> filteredContacts = contacts.entrySet()
+		        .stream()
+		        .filter(contact -> "John".equalsIgnoreCase(contact.getValue()))
+		        .collect(Collectors.toMap(c -> c.getKey(), c -> c.getValue()));
 		filteredContacts.forEach((k, v) -> System.out.println(k + " - " + v));
 		System.out.println("---------------------------");
 		// Map
-		String contactNames = contacts.entrySet().stream().map(c -> c.getValue()).distinct()
-				.collect(Collectors.joining(" , "));
+		String contactNames = contacts.entrySet()
+		        .stream()
+		        .map(c -> c.getValue())
+		        .distinct()
+		        .collect(Collectors.joining(" , "));
 
 		System.out.println(contactNames);
 		System.out.println("---------------------------");
 		// sorting
-		LinkedHashMap<String, String> sortedMap = contacts.entrySet().stream().sorted(Entry.comparingByValue())
-				.collect(Collectors.toMap(c -> c.getKey(), c -> c.getValue(), (v1, v2) -> v1, LinkedHashMap::new));
+		LinkedHashMap<String, String> sortedMap = contacts.entrySet()
+		        .stream()
+		        .sorted(Entry.comparingByValue())
+		        .collect(Collectors.toMap(c -> c.getKey(), c -> c.getValue(), (v1, v2) -> v1, LinkedHashMap::new));
 
 		sortedMap.forEach((k, v) -> System.out.println(k + " - " + v));
 		System.out.println("---------------------------");
@@ -1254,7 +1384,10 @@ public class FunctionalImpl implements IFunctional {
 		marks.put("Maths", 78.00);
 		marks.put("English", 90.00);
 
-		OptionalDouble average = marks.values().stream().mapToDouble(m -> m).average();
+		OptionalDouble average = marks.values()
+		        .stream()
+		        .mapToDouble(m -> m)
+		        .average();
 		System.out.println(average.getAsDouble());
 	}
 
@@ -1288,18 +1421,22 @@ public class FunctionalImpl implements IFunctional {
 		ListFun<Integer> list2 = ListFun.list(35, 78, 90);
 
 		System.out.println();
-		ListFun.concat(list1, list2).forEach(System.out::println);
+		ListFun.concat(list1, list2)
+		        .forEach(System.out::println);
 
 		System.out.println();
 
 		List<Integer> l = List.of(2, 5, 8, 6);
-		list1.addAllEle(l).forEach(System.out::println);
+		list1.addAllEle(l)
+		        .forEach(System.out::println);
 	}
 
 	/* Basic queue data structure operation example in function style */
 	public void queueOperationInFunctionlStyle() {
 		QueueFun<String> q = QueueFun.queue();
-		QueueFun<String> enqueue = q.enqueue("Hey").enqueue(" How are you?").enqueue(" Fine?");
+		QueueFun<String> enqueue = q.enqueue("Hey")
+		        .enqueue(" How are you?")
+		        .enqueue(" Fine?");
 		enqueue.forEach(System.out::println);
 		QueueFun<String> dequeue = enqueue.dequeue();
 		dequeue.forEach(System.out::println);

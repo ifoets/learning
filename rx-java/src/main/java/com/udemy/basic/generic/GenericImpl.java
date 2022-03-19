@@ -19,24 +19,26 @@ import com.udemy.basic.generic.creation.SquareBox;
 import com.udemy.basic.generic.creation.SubclassingData;
 import com.udemy.basic.generic.creation.UnboundedSorter;
 
+import io.reactivex.rxjava3.core.Observable;
+
 public class GenericImpl implements IGeneric {
 
 	/* Making you Familiar Very basic generic example */
 	public void basicGenericExmpl() {
 
-		Data<String> d1 = new Data<>("This is Generic String");
-		System.out.println(d1.toString());
+		Observable.just(new Data<>("This is Generic String"))
+		        .subscribe(e -> System.out.println(e));
 
-		Data<Integer> d2 = new Data<Integer>(10);
+		Observable.just(new Data<Integer>(Integer.valueOf(10)))
+		        .subscribe(e -> System.out.println(e));
 
-		System.out.println(d2.toString());
 	}
 
 	/* Generic Type Interface scenarios */
 	@Override
 	public void genericTypeInterfacec() {
-		IData<String> data = new Data<String>("Implemented Generic Interface");
-		System.out.println(data.toString());
+		Observable<IData<String>> data = Observable.just(new Data<String>("Implemented Generic Interface"));
+		data.subscribe(e -> System.out.println(e));
 	}
 
 	/** Subclassing Generic analysis **/
@@ -48,11 +50,10 @@ public class GenericImpl implements IGeneric {
 	@Override
 	public void subclassingExmpl() {
 
-		SubclassingData<String> d = new SubclassingData<String>("Subclassing");
+		Observable<BaseData<String>> data = Observable.just(new SubclassingData<String>("Subclassing"));
 		// we can assign to base class when both have parametrise type only
-		BaseData<String> bd = d;
 		// BaseData<Integer> bi=d; not useful compile type error
-		System.out.println(bd.toString());
+		data.subscribe(e -> System.out.println(e));
 	}
 
 	/***
@@ -77,10 +78,8 @@ public class GenericImpl implements IGeneric {
 	@Override
 	public void rowTypeExmpl() {
 
-		Box<Integer> box = new Box<>(List.of(1, 2, 3, 4, 5));
-		for (Integer element : box.getA()) {
-			System.out.println(element);
-		}
+		Observable.just(new Box<>(List.of(1, 2, 3, 4, 5)))
+		        .subscribe(e -> System.out.println(e));
 
 		// warning and during extracting need to type casting
 		// Box roBox = new Box<>(List.of(1, 2, "BasicStrong"));
@@ -89,8 +88,9 @@ public class GenericImpl implements IGeneric {
 	/** Multiple parameter */
 	@Override
 	public void multipleParmeterExmpl() {
-		Bin<String, Integer> bin = new Bin<String, Integer>("Kumar", 007);
-		System.out.println(bin.toString());
+		Observable.just(new Bin<String, Integer>("Kumar", 007))
+		        .subscribe(e -> System.out.println(e.toString()));
+
 	}
 
 	/* Sub typing parameter */

@@ -153,10 +153,11 @@ public class ReactiveImpl implements IReactive {
 	public void helloRxJavaExmpl() {
 
 		// emitting the events by source Observable
-		Observable<String> source = Observable.create(e -> {
-			e.onNext("Hello");
-			e.onNext("Rx-Java");
-		});
+		Observable<String> source = Observable.create(e ->
+			{
+				e.onNext("Hello");
+				e.onNext("Rx-Java");
+			});
 
 		// detecting the emission by Observer and doing some operation on that
 		source.subscribe(e -> System.out.println("Obsrver 1: + " + e));
@@ -217,12 +218,13 @@ public class ReactiveImpl implements IReactive {
 		// create()
 		Observable<Integer> source = Observable.create(
 
-				e -> {
-					e.onNext(10);
-					e.onNext(11);
-					e.onNext(12);
-					e.onComplete();
-				});
+		        e ->
+			        {
+				        e.onNext(10);
+				        e.onNext(11);
+				        e.onNext(12);
+				        e.onComplete();
+			        });
 
 		source.subscribe(System.out::println);
 
@@ -248,7 +250,7 @@ public class ReactiveImpl implements IReactive {
 		Observable<String> source = Observable.just("Orange", "Black", "Red");
 
 		source.subscribe(i -> System.out.println(i), Throwable::printStackTrace,
-				() -> System.out.println("Completed!"));
+		        () -> System.out.println("Completed!"));
 
 		System.out.println("--------X------X-------");
 		source.subscribe(i -> System.out.println(i), Throwable::printStackTrace);
@@ -283,7 +285,8 @@ public class ReactiveImpl implements IReactive {
 	@Override
 	public void connectableObservableExmpl() throws InterruptedException {
 		io.reactivex.rxjava3.observables.@NonNull ConnectableObservable<@NonNull Long> source = Observable
-				.interval(1, TimeUnit.SECONDS).publish();
+		        .interval(1, TimeUnit.SECONDS)
+		        .publish();
 
 		source.connect();
 
@@ -303,12 +306,14 @@ public class ReactiveImpl implements IReactive {
 		Observable<String> source = Observable.just("Alex", "Justin", "Jack");
 		Observable<String> source1 = Observable.empty();
 
-		source.first("Name").subscribe(System.out::println);
+		source.first("Name")
+		        .subscribe(System.out::println);
 
-		Single.just("Alex").subscribe(System.out::println);
+		Single.just("Alex")
+		        .subscribe(System.out::println);
 
-		source.firstElement().subscribe(System.out::println, e -> e.printStackTrace(),
-				() -> System.out.println("Completed"));
+		source.firstElement()
+		        .subscribe(System.out::println, e -> e.printStackTrace(), () -> System.out.println("Completed"));
 
 		Completable completable = Completable.complete();
 
@@ -317,13 +322,14 @@ public class ReactiveImpl implements IReactive {
 		completable.subscribe(() -> System.out.println("Completed"));
 
 		Completable.fromRunnable(() -> System.out.println("Some process executing"))
-				.subscribe(() -> System.out.println("The process executed succesfully"));
+		        .subscribe(() -> System.out.println("The process executed succesfully"));
 
 		System.out.println("--------------------X-----------------X------------------");
 
-		source1.first("Name").subscribe(System.out::println);
-		source1.firstElement().subscribe(System.out::println, e -> e.printStackTrace(),
-				() -> System.out.println("Completed"));
+		source1.first("Name")
+		        .subscribe(System.out::println);
+		source1.firstElement()
+		        .subscribe(System.out::println, e -> e.printStackTrace(), () -> System.out.println("Completed"));
 
 	}
 
@@ -351,8 +357,10 @@ public class ReactiveImpl implements IReactive {
 	@Override
 	public void basicOperatorExmpl() {
 
-		Observable.just(60, 57, 89, 90, 25, 97, 100).filter(e -> e > 75).sorted()
-				.subscribe(e -> System.out.println("Grad A with Marks :-" + e));
+		Observable.just(60, 57, 89, 90, 25, 97, 100)
+		        .filter(e -> e > 75)
+		        .sorted()
+		        .subscribe(e -> System.out.println("Grad A with Marks :-" + e));
 		/*
 		 * Exp- filter is Observer for Observable.just(60, 57, 89, 90, 25, 97, 100)
 		 * sorted is Observer for produced Observable by.filter(e -> e > 75) subscribe
@@ -366,11 +374,11 @@ public class ReactiveImpl implements IReactive {
 
 		Observable<Employee> obs = Observable.fromIterable(list);
 		obs.filter(e -> e.getRating() > 4) // collect rating >4
-				.sorted((e1, e2) -> Double.compare(e2.getRating(), e1.getRating())) // sort in DEC order
-				.map(e -> e.getName())// collect only name
-				.take(4) // collect the first 4
-				// .toList() //collect in list
-				.subscribe(System.out::println);
+		        .sorted((e1, e2) -> Double.compare(e2.getRating(), e1.getRating())) // sort in DEC order
+		        .map(e -> e.getName())// collect only name
+		        .take(4) // collect the first 4
+		        // .toList() //collect in list
+		        .subscribe(System.out::println);
 	}
 
 	/* Merging and concatenating Example */
@@ -381,13 +389,17 @@ public class ReactiveImpl implements IReactive {
 		// Observable<String> src2 = Observable.just("Priya","Chloe");
 
 		// Here Asnyk 2 different thread running parallly and can see result
-		Observable<String> src1 = Observable.interval(1, TimeUnit.SECONDS).map(e -> "src1 : " + e).take(5);
-		Observable<String> src2 = Observable.interval(1, TimeUnit.SECONDS).map(e -> "src2 : " + e);
+		Observable<String> src1 = Observable.interval(1, TimeUnit.SECONDS)
+		        .map(e -> "src1 : " + e)
+		        .take(5);
+		Observable<String> src2 = Observable.interval(1, TimeUnit.SECONDS)
+		        .map(e -> "src2 : " + e);
 		// Observable.merge(src1, src2).subscribe(System.out::println);
 		// Observable.concat(src1, src2)
 		// .subscribe(e -> System.out.println("Received : "+ e));
 
-		src1.concatWith(src2).subscribe(e -> System.out.println("Received : " + e));
+		src1.concatWith(src2)
+		        .subscribe(e -> System.out.println("Received : " + e));
 		Thread.sleep(10000);
 	}
 
@@ -395,23 +407,30 @@ public class ReactiveImpl implements IReactive {
 	@Override
 	public void flatMapConcatMapExmlp() throws InterruptedException {
 		List<String> list = List.of("Hello", "Reactive", "Programming");
-		Observable.fromIterable(list).flatMap(e -> Observable.fromArray(e.split("")))
-				.subscribe(e -> System.out.print(e + " "));
+		Observable.fromIterable(list)
+		        .flatMap(e -> Observable.fromArray(e.split("")))
+		        .subscribe(e -> System.out.print(e + " "));
 
 		System.out.println("\n------------------X------------X------------------");
 		// this not gives proper result since Synk, need to Asynk ie by 2 different
 		// thread
-		Observable.fromIterable(list).concatMap(e -> Observable.fromArray(e.split("")))
-				.subscribe(e -> System.out.print(e + " "));
+		Observable.fromIterable(list)
+		        .concatMap(e -> Observable.fromArray(e.split("")))
+		        .subscribe(e -> System.out.print(e + " "));
 	}
 
 	/* Disposing Of Duplicate Emitting Sources : amb() Example */
 	@Override
 	public void disposingAmbExmpl() throws InterruptedException {
-		Observable<String> ob1 = Observable.interval(1, TimeUnit.SECONDS).take(10).map(e -> "Ob 1 :" + e);
-		Observable<String> ob2 = Observable.interval(10, TimeUnit.MILLISECONDS).take(10).map(e -> "Ob 2 :" + e);
+		Observable<String> ob1 = Observable.interval(1, TimeUnit.SECONDS)
+		        .take(10)
+		        .map(e -> "Ob 1 :" + e);
+		Observable<String> ob2 = Observable.interval(10, TimeUnit.MILLISECONDS)
+		        .take(10)
+		        .map(e -> "Ob 2 :" + e);
 
-		Observable.amb(Arrays.asList(ob1, ob2)).subscribe(System.out::println);
+		Observable.amb(Arrays.asList(ob1, ob2))
+		        .subscribe(System.out::println);
 
 		Thread.sleep(11000);
 	}
@@ -419,15 +438,17 @@ public class ReactiveImpl implements IReactive {
 	/* zip() V/s combineLatest()Example */
 	@Override
 	public void zipCombinLatestExmpl() throws InterruptedException {
-		Observable<Long> src1 = Observable.interval(200, TimeUnit.MILLISECONDS).take(5);
+		Observable<Long> src1 = Observable.interval(200, TimeUnit.MILLISECONDS)
+		        .take(5);
 
-		Observable<Long> src2 = Observable.interval(1, TimeUnit.SECONDS).take(5);
+		Observable<Long> src2 = Observable.interval(1, TimeUnit.SECONDS)
+		        .take(5);
 
 		// Observable.zip(src1, src2, (e1, e2) -> "Source 1 : " + e1 + " Source 2: " +
 		// e2).subscribe(System.out::println);
 
 		Observable.combineLatest(src1, src2, (e1, e2) -> "Source 1 : " + e1 + " Source 2: " + e2)
-				.subscribe(System.out::println);
+		        .subscribe(System.out::println);
 
 		Thread.sleep(20000);
 	}
@@ -439,8 +460,9 @@ public class ReactiveImpl implements IReactive {
 
 		// obs.groupBy(e -> e.getRating()).flatMapSingle(e ->
 		// e.toList()).subscribe(System.out::println);
-		obs.groupBy(e -> e.getRating()).flatMapSingle(e -> e.toMultimap(key -> e.getKey(), emp -> emp.getName()))
-				.subscribe(System.out::println);
+		obs.groupBy(e -> e.getRating())
+		        .flatMapSingle(e -> e.toMultimap(key -> e.getKey(), emp -> emp.getName()))
+		        .subscribe(System.out::println);
 	}
 
 	/** Section 21: Concurrency And Parallelization **/
@@ -453,25 +475,27 @@ public class ReactiveImpl implements IReactive {
 	public void concurrencyInRxExmpl() {
 		Observable<String> source = Observable.create(
 
-				e -> {
-					new Thread(() -> {
-						e.onNext("Hello");
-						e.onNext("RxJava");
-					}).start();
-				});
+		        e ->
+			        {
+				        new Thread(() ->
+					        {
+						        e.onNext("Hello");
+						        e.onNext("RxJava");
+					        }).start();
+			        });
 
-		source.subscribe(
-				e -> System.out.println("Observer 1 :" + e + " Thread is :" + Thread.currentThread().getName()));
+		source.subscribe(e -> System.out.println("Observer 1 :" + e + " Thread is :" + Thread.currentThread()
+		        .getName()));
 
-		source.subscribe(
-				e -> System.out.println("Observer 2 :" + e + " Thread is :" + Thread.currentThread().getName()));
+		source.subscribe(e -> System.out.println("Observer 2 :" + e + " Thread is :" + Thread.currentThread()
+		        .getName()));
 	}
 
 	/* Schedulers(ComputationScheduler) Basic Example */
 	@Override
 	public void computationSchedulerExmpl() throws InterruptedException {
 		Observable<String> src = Observable.just("Pasta", "Pizza", "Fries", "Curry", "Chow mein")
-				.subscribeOn(Schedulers.computation()); // it automatic get threads=no of CUP
+		        .subscribeOn(Schedulers.computation()); // it automatic get threads=no of CUP
 
 		src.subscribe(e -> compute());
 		src.subscribe(e -> compute());
@@ -486,7 +510,8 @@ public class ReactiveImpl implements IReactive {
 	public static void compute() throws InterruptedException {
 
 		Thread.sleep(1000);
-		System.out.println("Computation Done By : " + Thread.currentThread().getName());
+		System.out.println("Computation Done By : " + Thread.currentThread()
+		        .getName());
 	}
 
 	/*
@@ -496,7 +521,7 @@ public class ReactiveImpl implements IReactive {
 	@Override
 	public void ioSchedulerExmpl() throws InterruptedException {
 		Observable<String> src = Observable.just("Pasta", "Pizza", "Fries", "Curry", "Chow mein")
-				.subscribeOn(Schedulers.io());
+		        .subscribeOn(Schedulers.io());
 
 		src.subscribe(e -> ioOeration());
 
@@ -514,7 +539,8 @@ public class ReactiveImpl implements IReactive {
 	public static void ioOeration() throws InterruptedException {
 
 		Thread.sleep(1000);
-		System.out.println("Computation Done By : " + Thread.currentThread().getName());
+		System.out.println("Computation Done By : " + Thread.currentThread()
+		        .getName());
 	}
 
 	/*
@@ -523,7 +549,7 @@ public class ReactiveImpl implements IReactive {
 	@Override
 	public void newThreadSchedulerExmpl() throws InterruptedException {
 		Observable<String> src = Observable.just("Pasta", "Pizza", "Fries", "Curry", "Chow mein")
-				.subscribeOn(Schedulers.newThread());
+		        .subscribeOn(Schedulers.newThread());
 
 		src.subscribe(e -> task());
 
@@ -539,7 +565,8 @@ public class ReactiveImpl implements IReactive {
 	public static void task() throws InterruptedException {
 
 		Thread.sleep(1000);
-		System.out.println("Computation Done By : " + Thread.currentThread().getName());
+		System.out.println("Computation Done By : " + Thread.currentThread()
+		        .getName());
 	}
 
 	/*
@@ -548,7 +575,7 @@ public class ReactiveImpl implements IReactive {
 	@Override
 	public void singleThreadSchedulerExmpl() throws InterruptedException {
 		Observable<String> src = Observable.just("Pasta", "Pizza", "Fries", "Curry", "Chow mein")
-				.subscribeOn(Schedulers.single());
+		        .subscribeOn(Schedulers.single());
 
 		src.subscribe(e -> sensitiveTask());
 		src.subscribe(e -> sensitiveTask());
@@ -563,7 +590,8 @@ public class ReactiveImpl implements IReactive {
 	public static void sensitiveTask() throws InterruptedException {
 
 		Thread.sleep(1000);
-		System.out.println("Computation Done By : " + Thread.currentThread().getName());
+		System.out.println("Computation Done By : " + Thread.currentThread()
+		        .getName());
 	}
 
 	/*
@@ -577,8 +605,9 @@ public class ReactiveImpl implements IReactive {
 		@NonNull
 		Scheduler scheduler = Schedulers.from(executor);
 
-		Observable<String> src = Observable.just("Pasta", "Pizza", "Fries", "Curry", "Chow mein").subscribeOn(scheduler)
-				.doFinally(executor::shutdown);// u required to shutdown other wise it running
+		Observable<String> src = Observable.just("Pasta", "Pizza", "Fries", "Curry", "Chow mein")
+		        .subscribeOn(scheduler)
+		        .doFinally(executor::shutdown);// u required to shutdown other wise it running
 
 		src.subscribe(e -> compute());
 		src.subscribe(e -> compute());
@@ -594,10 +623,15 @@ public class ReactiveImpl implements IReactive {
 	@Override
 	public void subscribeOnObserveOnBasicExmpl() throws InterruptedException {
 
-		Observable.just("Pasta", "Pizza", "Fries", "Curry", "Chow mein").subscribeOn(Schedulers.computation())
-				.map(e -> e.toUpperCase()).doOnNext(e -> System.out.println(Thread.currentThread().getName()))
-				.observeOn(Schedulers.newThread()).filter(e -> e.startsWith("P")).observeOn(Schedulers.io())
-				.subscribe(e -> System.out.println(e));
+		Observable.just("Pasta", "Pizza", "Fries", "Curry", "Chow mein")
+		        .subscribeOn(Schedulers.computation())
+		        .map(e -> e.toUpperCase())
+		        .doOnNext(e -> System.out.println(Thread.currentThread()
+		                .getName()))
+		        .observeOn(Schedulers.newThread())
+		        .filter(e -> e.startsWith("P"))
+		        .observeOn(Schedulers.io())
+		        .subscribe(e -> System.out.println(e));
 
 		Thread.sleep(6000);
 	}
@@ -605,15 +639,18 @@ public class ReactiveImpl implements IReactive {
 	/* flatMap() To Achieve Concurrency */
 	public void flatMapUseInConcurrencyExmpl() throws InterruptedException {
 		Observable.just("Pasta", "Pizza", "Fries", "Curry", "Chow mein")
-				.flatMap(e -> Observable.just(e).subscribeOn(Schedulers.computation()).map(str -> compute(str)))
-				.subscribe(System.out::println);
+		        .flatMap(e -> Observable.just(e)
+		                .subscribeOn(Schedulers.computation())
+		                .map(str -> compute(str)))
+		        .subscribe(System.out::println);
 
 		Thread.sleep(7000);
 	}
 
 	public static String compute(String element) throws InterruptedException {
 
-		String s = element + " : Printed By : " + Thread.currentThread().getName() + " at : " + LocalTime.now();
+		String s = element + " : Printed By : " + Thread.currentThread()
+		        .getName() + " at : " + LocalTime.now();
 		return s;
 	}
 
@@ -627,10 +664,11 @@ public class ReactiveImpl implements IReactive {
 
 		@NonNull
 		Observable<@NonNull Long> src = Observable.interval(1, TimeUnit.SECONDS)
-				// .replay()//replay from initial emission
-				// .replay(x)//replay from x previous emission
-				//// .replay(x y, TimeUnit.SECONDS) replay x emission fromm last y emission
-				.replay(2, 4, TimeUnit.SECONDS).autoConnect();// autoConnect when we want to connect it is not in chache
+		        // .replay()//replay from initial emission
+		        // .replay(x)//replay from x previous emission
+		        //// .replay(x y, TimeUnit.SECONDS) replay x emission fromm last y emission
+		        .replay(2, 4, TimeUnit.SECONDS)
+		        .autoConnect();// autoConnect when we want to connect it is not in chache
 		src.subscribe(e -> System.out.println("Observer 1 : " + e));
 
 		Thread.sleep(5000);
@@ -646,7 +684,8 @@ public class ReactiveImpl implements IReactive {
 	@Override
 	public void cacheBasicExmpl() throws InterruptedException {
 		@NonNull
-		Observable<@NonNull Long> src = Observable.interval(1, TimeUnit.SECONDS).cache();
+		Observable<@NonNull Long> src = Observable.interval(1, TimeUnit.SECONDS)
+		        .cache();
 
 		src.subscribe(e -> System.out.println("Observer 1 : " + e));
 		Thread.sleep(5000);
@@ -674,8 +713,10 @@ public class ReactiveImpl implements IReactive {
 	@Override
 	public void subjectBasicExample() throws InterruptedException {
 		@NonNull
-		Observable<Integer> src1 = Observable.just(5, 10, 15, 20).subscribeOn(Schedulers.computation());
-		Observable<Integer> src2 = Observable.just(50, 100, 150, 200).subscribeOn(Schedulers.computation());
+		Observable<Integer> src1 = Observable.just(5, 10, 15, 20)
+		        .subscribeOn(Schedulers.computation());
+		Observable<Integer> src2 = Observable.just(50, 100, 150, 200)
+		        .subscribeOn(Schedulers.computation());
 
 		// src1.subscribe(e -> System.out.println(e));
 		// src2.subscribe(e -> System.out.println(e));
@@ -787,7 +828,8 @@ public class ReactiveImpl implements IReactive {
 		/* it keep the buffered and subscribed all buffered at a time */
 		Subject<Long> subject = UnicastSubject.create();
 
-		Observable.interval(500, TimeUnit.MILLISECONDS).subscribe(subject);
+		Observable.interval(500, TimeUnit.MILLISECONDS)
+		        .subscribe(subject);
 		Thread.sleep(2000);
 		subject.subscribe(e -> System.out.println("Subscriber 1: " + e));
 		Thread.sleep(2000);
@@ -800,19 +842,25 @@ public class ReactiveImpl implements IReactive {
 	public void bufferOpratorExmpl() throws InterruptedException {
 		// buffer(x) meas chunk of X element, buffer(x,y) means chunk of x in each y
 		// buffer(x,HashSet::new) get set of x chunk
-		Observable.range(1, 30).buffer(4, 5).subscribe(System.out::println);
+		Observable.range(1, 30)
+		        .buffer(4, 5)
+		        .subscribe(System.out::println);
 
 		System.out.println("----------X--------------X----------");
 		// when ever reach to 1 second
 		// get chunk of buffered
 		// emission
-		Observable.interval(500, TimeUnit.MILLISECONDS).buffer(1, TimeUnit.SECONDS, 2).subscribe(System.out::println);
+		Observable.interval(500, TimeUnit.MILLISECONDS)
+		        .buffer(1, TimeUnit.SECONDS, 2)
+		        .subscribe(System.out::println);
 		Thread.sleep(4000);
 		System.out.println("----------X--------------X----------");
 		@NonNull
 		Observable<Long> interval = Observable.interval(500, TimeUnit.MILLISECONDS);
 
-		Observable.interval(1000, TimeUnit.MILLISECONDS).buffer(interval).subscribe(System.out::println);
+		Observable.interval(1000, TimeUnit.MILLISECONDS)
+		        .buffer(interval)
+		        .subscribe(System.out::println);
 
 		Thread.sleep(4000);
 
@@ -827,7 +875,9 @@ public class ReactiveImpl implements IReactive {
 		@NonNull
 		Observable<Long> interval = Observable.interval(500, TimeUnit.MILLISECONDS);
 
-		Observable.interval(1000, TimeUnit.MILLISECONDS).window(interval).subscribe(System.out::println);
+		Observable.interval(1000, TimeUnit.MILLISECONDS)
+		        .window(interval)
+		        .subscribe(System.out::println);
 
 		Thread.sleep(8000);
 	}
@@ -835,57 +885,63 @@ public class ReactiveImpl implements IReactive {
 	/* Basic operation on Throttling */
 	@Override
 	public void throttlingOperationExmpl() throws InterruptedException {
-		Observable<String> obs = Observable.create(emitter -> {
-			emitter.onNext("A");
+		Observable<String> obs = Observable.create(emitter ->
+			{
+				emitter.onNext("A");
 
-			Thread.sleep(200);
-			emitter.onNext("B");
+				Thread.sleep(200);
+				emitter.onNext("B");
 
-			Thread.sleep(100);
-			emitter.onNext("C");
+				Thread.sleep(100);
+				emitter.onNext("C");
 
-			Thread.sleep(400);
-			emitter.onNext("D");
+				Thread.sleep(400);
+				emitter.onNext("D");
 
-			Thread.sleep(300);
-			emitter.onNext("E");
+				Thread.sleep(300);
+				emitter.onNext("E");
 
-			Thread.sleep(800);
-			emitter.onNext("F");
+				Thread.sleep(800);
+				emitter.onNext("F");
 
-			Thread.sleep(900);
-			emitter.onNext("X");
+				Thread.sleep(900);
+				emitter.onNext("X");
 
-			Thread.sleep(600);
-			emitter.onNext("Y");
+				Thread.sleep(600);
+				emitter.onNext("Y");
 
-			Thread.sleep(1000);
-			emitter.onNext("Z");
+				Thread.sleep(1000);
+				emitter.onNext("Z");
 
-			emitter.onComplete();
-		});
+				emitter.onComplete();
+			});
 
-		obs.throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(item -> System.out.println("onNext: " + item),
-				Throwable::printStackTrace, () -> System.out.println("onComplete"));
+		obs.throttleFirst(1000, TimeUnit.MILLISECONDS)
+		        .subscribe(item -> System.out.println("onNext: " + item), Throwable::printStackTrace,
+		                () -> System.out.println("onComplete"));
 		Thread.sleep(2000);
 		// obs.throttleLast or obs.sample alias
-		obs.sample(100, TimeUnit.MILLISECONDS).subscribe(item -> System.out.println("onNext: " + item),
-				Throwable::printStackTrace, () -> System.out.println("onComplete"));
+		obs.sample(100, TimeUnit.MILLISECONDS)
+		        .subscribe(item -> System.out.println("onNext: " + item), Throwable::printStackTrace,
+		                () -> System.out.println("onComplete"));
 		Thread.sleep(2000);
 		// obs.ThrotalWithtimout or obs.debounce alis
-		obs.debounce(700, TimeUnit.MILLISECONDS).subscribe(item -> System.out.println("onNext: " + item),
-				Throwable::printStackTrace, () -> System.out.println("onComplete"));
+		obs.debounce(700, TimeUnit.MILLISECONDS)
+		        .subscribe(item -> System.out.println("onNext: " + item), Throwable::printStackTrace,
+		                () -> System.out.println("onComplete"));
 	}
 
 	/* Basic swithMap operation, it switch on every dispose action */
 	@Override
 	public void switchMapOperationExmpl() throws InterruptedException {
-		Observable<String> source = Observable.just("John", "Lily", "Emma", "Reyan", "Darshin").concatMap(
-				s -> Observable.just(s).delay(ThreadLocalRandom.current().nextInt(1000), TimeUnit.MILLISECONDS));
+		Observable<String> source = Observable.just("John", "Lily", "Emma", "Reyan", "Darshin")
+		        .concatMap(s -> Observable.just(s)
+		                .delay(ThreadLocalRandom.current()
+		                        .nextInt(1000), TimeUnit.MILLISECONDS));
 
 		Observable.interval(2, TimeUnit.SECONDS)
-				.switchMap(s -> source.doOnDispose(() -> System.out.println("Disposing and starting again!")))
-				.subscribe(System.out::println);
+		        .switchMap(s -> source.doOnDispose(() -> System.out.println("Disposing and starting again!")))
+		        .subscribe(System.out::println);
 
 		Thread.sleep(10000);
 	}
@@ -894,13 +950,20 @@ public class ReactiveImpl implements IReactive {
 	@Override
 	public void producerConsumerObserable() throws InterruptedException {
 
-		Observable.range(1, 10000).map(e -> {
-			System.out.println("Produce item-: " + e + " : " + Thread.currentThread().getName());
-			return e;
-		}).observeOn(Schedulers.io()).subscribe(e -> {
-			Thread.sleep(100);
-			System.out.println("Consume item- " + e + " : " + Thread.currentThread().getName());
-		});
+		Observable.range(1, 10000)
+		        .map(e ->
+			        {
+				        System.out.println("Produce item-: " + e + " : " + Thread.currentThread()
+				                .getName());
+				        return e;
+			        })
+		        .observeOn(Schedulers.io())
+		        .subscribe(e ->
+			        {
+				        Thread.sleep(100);
+				        System.out.println("Consume item- " + e + " : " + Thread.currentThread()
+				                .getName());
+			        });
 
 		Thread.sleep(100000);
 	}
@@ -908,13 +971,20 @@ public class ReactiveImpl implements IReactive {
 	/* Producer-Consumer Problem - Flowable Need Of Backpressure */
 	@Override
 	public void producerConsumerFlowable() throws InterruptedException {
-		Observable.range(1, 1000000).map(e -> {
-			System.out.println("Produce item-: " + e + " : " + Thread.currentThread().getName());
-			return e;
-		}).observeOn(Schedulers.io()).subscribe(e -> {
-			// Thread.sleep(100);
-			System.out.println("Consume item- " + e + " : " + Thread.currentThread().getName());
-		});
+		Observable.range(1, 1000000)
+		        .map(e ->
+			        {
+				        System.out.println("Produce item-: " + e + " : " + Thread.currentThread()
+				                .getName());
+				        return e;
+			        })
+		        .observeOn(Schedulers.io())
+		        .subscribe(e ->
+			        {
+				        // Thread.sleep(100);
+				        System.out.println("Consume item- " + e + " : " + Thread.currentThread()
+				                .getName());
+			        });
 
 		Thread.sleep(100000);
 	}
@@ -922,15 +992,18 @@ public class ReactiveImpl implements IReactive {
 	/* Flowable Creation with subscribe Example */
 	@Override
 	public void flowableCreationExmpl() throws InterruptedException {
-		Flowable.create(emitter -> {
-			for (int i = 0; i <= 5000; i++) {
-				if (emitter.isCancelled())
-					return;
-				emitter.onNext(i);
-			}
+		Flowable.create(emitter ->
+			{
+				for (int i = 0; i <= 5000; i++) {
+					if (emitter.isCancelled())
+						return;
+					emitter.onNext(i);
+				}
 
-			emitter.onComplete();
-		}, BackpressureStrategy.BUFFER).observeOn(Schedulers.io()).subscribe(System.out::println);
+				emitter.onComplete();
+			}, BackpressureStrategy.BUFFER)
+		        .observeOn(Schedulers.io())
+		        .subscribe(System.out::println);
 
 		Thread.sleep(2000);
 	}
@@ -939,45 +1012,50 @@ public class ReactiveImpl implements IReactive {
 	@Override
 	public void backPressureFlowableSubscriber() throws InterruptedException {
 
-		Flowable.range(1, 1000000).map(e -> {
-			System.out.println("Produced item is : " + e + " : " + Thread.currentThread().getName());
-			return e;
-		}).observeOn(Schedulers.io()).subscribe(new Subscriber<Integer>() {
+		Flowable.range(1, 1000000)
+		        .map(e ->
+			        {
+				        System.out.println("Produced item is : " + e + " : " + Thread.currentThread()
+				                .getName());
+				        return e;
+			        })
+		        .observeOn(Schedulers.io())
+		        .subscribe(new Subscriber<Integer>() {
 
-			Subscription s;
-			AtomicInteger count = new AtomicInteger(0);
+			        Subscription s;
+			        AtomicInteger count = new AtomicInteger(0);
 
-			@Override
-			public void onSubscribe(Subscription s) {
-				this.s = s;
-				System.out.println("Asking for 20 items");
-				s.request(20);
+			        @Override
+			        public void onSubscribe(Subscription s) {
+				        this.s = s;
+				        System.out.println("Asking for 20 items");
+				        s.request(20);
 
-			}
+			        }
 
-			@Override
-			public void onNext(Integer t) {
+			        @Override
+			        public void onNext(Integer t) {
 
-				if (count.getAndIncrement() % 20 == 0) {
-					System.out.println("Asking for next 20 items ");
-					s.request(20);
-				}
-				System.out.println("The subscriber consumed : " + t);
-				sleep(100);
-			}
+				        if (count.getAndIncrement() % 20 == 0) {
+					        System.out.println("Asking for next 20 items ");
+					        s.request(20);
+				        }
+				        System.out.println("The subscriber consumed : " + t);
+				        sleep(100);
+			        }
 
-			@Override
-			public void onError(Throwable t) {
-				t.printStackTrace();
-			}
+			        @Override
+			        public void onError(Throwable t) {
+				        t.printStackTrace();
+			        }
 
-			@Override
-			public void onComplete() {
-				System.out.println("Completed");
-			}
-		}
+			        @Override
+			        public void onComplete() {
+				        System.out.println("Completed");
+			        }
+		        }
 
-		);
+				);
 
 		sleep(100000000);
 	}
@@ -986,11 +1064,17 @@ public class ReactiveImpl implements IReactive {
 	@Override
 	public void observableFlowableConversion() throws InterruptedException {
 
-		Flowable.range(1, 100).toObservable().observeOn(Schedulers.io())
-				.subscribe(e -> System.out.println(e + " " + Thread.currentThread().getName()));
+		Flowable.range(1, 100)
+		        .toObservable()
+		        .observeOn(Schedulers.io())
+		        .subscribe(e -> System.out.println(e + " " + Thread.currentThread()
+		                .getName()));
 
-		Observable.range(1, 100).toFlowable(BackpressureStrategy.BUFFER).observeOn(Schedulers.io())
-				.subscribe(e -> System.out.println(e + " " + Thread.currentThread().getName()));
+		Observable.range(1, 100)
+		        .toFlowable(BackpressureStrategy.BUFFER)
+		        .observeOn(Schedulers.io())
+		        .subscribe(e -> System.out.println(e + " " + Thread.currentThread()
+		                .getName()));
 
 		Thread.sleep(5000);
 	}

@@ -1,5 +1,6 @@
 package com.udemy.basic.functional.finterface;
 
+//SAM single abstract method notation
 @FunctionalInterface
 public interface F2Interface {
 
