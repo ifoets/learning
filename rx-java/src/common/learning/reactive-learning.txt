@@ -1,0 +1,34 @@
+Rx-java-ok, full
+Rx-spring boot/microservice/RESTAPI/different db/mango/r2
+Rx-Design pattern
+Rx-architeture
+
+Reactive databse
+control flow of  reactive and debugging
+Spring Data R2DBC Transaction/transaction reactive Tx management
+
+r2database
+https://docs.spring.io/spring-data/r2dbc/docs/current/reference/html/#r2dbc.drivers
+Reactive  supported driver link
+-------------------------------
+https://docs.spring.io/spring-data/r2dbc/docs/current/reference/html/#r2dbc.drivers
+
+yudmy tutuer home page
+---------------------------------
+https://www.vinsguru.com/
+
+Reactor in youtube
+--------------------------------------
+rx-java
+
+https://www.youtube.com/watch?v=O26jhgk682Q&t=8812s
+
+https://www.youtube.com/playlist?list=PLnXn1AViWyL70R5GuXt_nIDZytYBnvBdd
+https://www.youtube.com/watch?v=O26jhgk682Q
+Reactive design pattern
+=================================
+https://livebook.manning.com/book/reactive-design-patterns/appendix-a/1
+https://www.manning.com/books/reactive-design-patterns(go down look table of content)
+
+list of design pattern in rx java
+

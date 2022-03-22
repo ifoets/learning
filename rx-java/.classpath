@@ -13,7 +13,7 @@
 			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry excluding="**" kind="src" output="target/classes" path="src/comman">
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/common">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
