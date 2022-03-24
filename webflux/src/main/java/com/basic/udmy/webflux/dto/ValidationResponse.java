@@ -19,11 +19,20 @@ public class ValidationResponse {
 
 	private String message;
 
+	public ValidationResponse() {
+
+	}
+
 	public ValidationResponse(int errrorCode, int input, String message) {
 		super();
 		this.errrorCode = errrorCode;
 		this.input = input;
 		this.message = message;
+	}
+
+	@Override
+	public String toString() {
+		return "ValidationResponse [errrorCode=" + errrorCode + ", input=" + input + ", message=" + message + "]";
 	}
 
 }

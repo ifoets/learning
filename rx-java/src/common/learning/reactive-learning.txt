@@ -1,3 +1,7 @@
+netstat -ano | findstr :8080
+taskkill /PID 15412 /F
+
+
 Rx-java-ok, full
 Rx-spring boot/microservice/RESTAPI/different db/mango/r2
 Rx-Design pattern
