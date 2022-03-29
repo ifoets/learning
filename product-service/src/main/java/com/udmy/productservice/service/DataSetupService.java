@@ -1,5 +1,8 @@
 package com.udmy.productservice.service;
 
+import java.time.Duration;
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
@@ -24,9 +27,18 @@ public class DataSetupService implements CommandLineRunner {
 		ProductDto p5 = new ProductDto("headphone ", 200);
 
 		Flux.just(p1, p2, p3, p4, p5)
+		        // this is for sink testing
+		        // .concatWith(newProducts())
 		        .flatMap(e -> iProductService.insertProduct(Mono.just(e)))
 		        .subscribe(System.out::println);
 
 	}
 
+	@SuppressWarnings("unused")
+	private Flux<ProductDto> newProducts() {
+		return Flux.range(1, 1000)
+		        .delayElements(Duration.ofSeconds(2))
+		        .map(i -> new ProductDto("Product-" + i, ThreadLocalRandom.current()
+		                .nextInt(10, 100)));
+	}
 }

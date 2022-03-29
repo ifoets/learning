@@ -10,9 +10,13 @@ import com.udmy.productservice.util.EntityDtoUtil;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Sinks;
 
 @Service
 public class ProductServiceImpl implements IProductService {
+
+	@Autowired
+	private Sinks.Many<ProductDto> sink;
 
 	@Autowired
 	private ProductRepository repository;
@@ -39,7 +43,8 @@ public class ProductServiceImpl implements IProductService {
 	public Mono<ProductDto> insertProduct(Mono<ProductDto> mono) {
 		return mono.map(EntityDtoUtil::toEntity)
 		        .flatMap(this.repository::insert)
-		        .map(EntityDtoUtil::toDto);
+		        .map(EntityDtoUtil::toDto)
+		        .doOnNext(this.sink::tryEmitNext);
 	}
 
 	@Override

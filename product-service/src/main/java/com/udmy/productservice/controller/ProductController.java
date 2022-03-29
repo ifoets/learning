@@ -1,5 +1,7 @@
 package com.udmy.productservice.controller;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,9 +36,11 @@ public class ProductController {
 	public Flux<ProductDto> getByPriceRange(@RequestParam("min") int min, @RequestParam("max") int max) {
 		return this.service.getProductsByPriceRange(min, max);
 	}
-	
+
 	@GetMapping("{id}")
 	public Mono<ResponseEntity<ProductDto>> getProduct(@PathVariable String id) {
+		//for creating  intermittent issue
+		//this.simulateRandomException();
 		return this.service.getProductById(id)
 		        .map(ResponseEntity::ok)
 		        .defaultIfEmpty(ResponseEntity.notFound()
@@ -61,5 +65,12 @@ public class ProductController {
 		return this.service.delete(id);
 	}
 
-	
+	@SuppressWarnings("unused")
+	private void simulateRandomException() {
+		int nextInt = ThreadLocalRandom.current()
+		        .nextInt(1, 10);
+		if (nextInt > 5)
+			throw new RuntimeException("Something worng");
+	}
+
 }
