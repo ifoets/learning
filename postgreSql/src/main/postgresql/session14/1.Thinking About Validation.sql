@@ -1,0 +1,3 @@
+--for any particular value like price, weight that must be positive ,
+--a validation require from database/table level also...for any worst senario
+--

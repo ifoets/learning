@@ -1,0 +1,2 @@
+--undo
+drop table comments;

@@ -1,0 +1,2 @@
+--migration of data
+--copying data from lat,lng to loc

@@ -1,0 +1,1 @@
+--migration of adding new  column to posts
