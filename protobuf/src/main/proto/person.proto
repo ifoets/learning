@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+import "common/address.proto";
+import "common/car.proto";
+//import "google/protobuf/wrappers.proto";
+option java_multiple_files = true;
+option java_package = "com.udemy.proto";
+message Watch {
+	int32 model = 1;
+}
+
+message Person {
+	string name = 1;
+	//google.protobuf.Int32Value age = 2;
+	int32 age = 2;
+	common.Address address = 3;
+	common.Car car = 4;
+	repeated Watch watch = 5;
+}
+

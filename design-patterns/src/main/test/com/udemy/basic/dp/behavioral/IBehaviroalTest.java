@@ -54,4 +54,32 @@ public class IBehaviroalTest {
 		ibh.interpreterPatternChallenge();
 	}
 
+	/** Iterator design pattern */
+
+	/* Iterator design pattern Example */
+	@Test
+	public void interatorPatternExampleTest() {
+		ibh.interatorPatternExample();
+	}
+
+	/* Iterator design pattern Challenge */
+	@Test
+	public void interatorPatternChallegeTest() {
+		ibh.interatorPatternChallege();
+	}
+
+	/** Mediator design pattern */
+
+	/* Mediator design pattern Example */
+	@Test
+	public void mediatorPatternExampleTest() {
+		ibh.mediatorPatternExample();
+	}
+
+	/* Mediator design pattern Challenge */
+	@Test
+	public void mediatorPatternChallengeTest() {
+		ibh.mediatorPatternChallenge();
+	}
+
 }

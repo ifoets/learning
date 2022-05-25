@@ -19,6 +19,21 @@ import com.udemy.basic.dp.behavioral.interpreter.InterpreterClient;
 import com.udemy.basic.dp.behavioral.interpreter.InterpreterContext;
 import com.udemy.basic.dp.behavioral.interpreter.challenge.Context;
 import com.udemy.basic.dp.behavioral.interpreter.challenge.Expression;
+import com.udemy.basic.dp.behavioral.iterator.NotificationBar;
+import com.udemy.basic.dp.behavioral.iterator.NotificationCollection;
+import com.udemy.basic.dp.behavioral.iterator.challenge.Arts;
+import com.udemy.basic.dp.behavioral.iterator.challenge.Science;
+import com.udemy.basic.dp.behavioral.iterator.challenge.StudentsClient;
+import com.udemy.basic.dp.behavioral.iterator.challenge.StudentsIterator;
+import com.udemy.basic.dp.behavioral.iterator.challenge.SubjectInterface;
+import com.udemy.basic.dp.behavioral.mediator.ChatMediator;
+import com.udemy.basic.dp.behavioral.mediator.ChatMediatorImpl;
+import com.udemy.basic.dp.behavioral.mediator.User;
+import com.udemy.basic.dp.behavioral.mediator.UserImpl;
+import com.udemy.basic.dp.behavioral.mediator.challenge.AuctionMediator;
+import com.udemy.basic.dp.behavioral.mediator.challenge.AuctionMediatorImpl;
+import com.udemy.basic.dp.behavioral.mediator.challenge.Buyer;
+import com.udemy.basic.dp.behavioral.mediator.challenge.BuyerImpl;
 
 public class BehavioralImpl implements IBehaviroal {
 
@@ -111,5 +126,78 @@ public class BehavioralImpl implements IBehaviroal {
 
 		Context ic3 = new Context("Married Lucy");
 		System.out.println("Lucy is male? " + isMale.interpret(ic3));
+	}
+
+	/** Iterator design pattern */
+
+	/* Iterator design pattern Example */
+	@Override
+	public void interatorPatternExample() {
+		NotificationCollection nc = new NotificationCollection();
+		NotificationBar nb = new NotificationBar(nc);
+
+		nb.printNotifications();
+	}
+
+	/* Iterator design pattern Challenge */
+	@Override
+	public void interatorPatternChallege() {
+		System.out.println("******** Iterator Pattern Demo ********\n");
+
+		SubjectInterface s = new Science();
+		SubjectInterface a = new Arts();
+
+		StudentsIterator scIterator = s.createIterator();
+		StudentsIterator aIterator = a.createIterator();
+
+		StudentsClient.print(scIterator);
+		StudentsClient.print(aIterator);
+	}
+
+	/** Mediator design pattern */
+
+	/* Mediator design pattern Example */
+	@Override
+	public void mediatorPatternExample() {
+		ChatMediator mediator = new ChatMediatorImpl();
+
+		User user1 = new UserImpl(mediator, "John");
+		User user2 = new UserImpl(mediator, "Jennifer");
+		User user3 = new UserImpl(mediator, "Lucy");
+		User user4 = new UserImpl(mediator, "Ian");
+
+		mediator.addUser(user1);
+		mediator.addUser(user2);
+		mediator.addUser(user3);
+		mediator.addUser(user4);
+
+		user1.send("Hi All");
+	}
+
+	/* Mediator design pattern Challenge */
+	@Override
+	public void mediatorPatternChallenge() {
+		AuctionMediator mediator = new AuctionMediatorImpl();
+
+		Buyer buyer1 = new BuyerImpl(mediator, "Jason");
+		Buyer buyer2 = new BuyerImpl(mediator, "John");
+		Buyer buyer3 = new BuyerImpl(mediator, "Jennifer");
+		Buyer buyer4 = new BuyerImpl(mediator, "Lucy");
+
+		mediator.addBuyer(buyer1);
+		mediator.addBuyer(buyer2);
+		mediator.addBuyer(buyer3);
+		mediator.addBuyer(buyer4);
+
+		buyer1.bid(100);
+		buyer2.bid(120);
+		buyer3.bid(130);
+		buyer4.bid(140);
+
+		mediator.findHighestBidder();
+
+		buyer4.cancelBid();
+
+		mediator.findHighestBidder();
 	}
 }
